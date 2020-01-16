@@ -1,6 +1,7 @@
 package com.chenlittleping.ripplelayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -77,26 +78,29 @@ public class RippleLayout extends FrameLayout {
 
     public RippleLayout(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
     public RippleLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
     public RippleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public RippleLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
+
+        getXmlAttrs(attrs);
+
         scroller = new Scroller(context, new DecelerateInterpolator(3f));
 
         ripplePaint.setColor(rippleColor);
@@ -116,6 +120,17 @@ public class RippleLayout extends FrameLayout {
 
         setPadding((int) (shadowSpace + getPaddingLeft()), (int) (shadowSpace + getPaddingTop()),
                 (int) (shadowSpace + getPaddingRight()), (int) (shadowSpace + getPaddingBottom()));
+    }
+
+    private void getXmlAttrs(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.ripple_layout);
+            rippleColor = ta.getColor(R.styleable.ripple_layout_ripple_color, rippleColor);
+            shadowSpace = ta.getDimension(R.styleable.ripple_layout_shadow_space, shadowSpace);
+            shadowColor = ta.getColor(R.styleable.ripple_layout_shadow_color, shadowColor);
+            normalColor = ta.getColor(R.styleable.ripple_layout_def_bg, normalColor);
+            radius = ta.getDimension(R.styleable.ripple_layout_radius, radius);
+        }
     }
 
     @Override

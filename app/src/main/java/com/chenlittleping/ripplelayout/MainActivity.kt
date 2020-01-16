@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ripple1.setStateListener(object : RippleLayout.IRippleStateChange {
+        ripple1.setStateListener(object : RippleLayoutKtl.IRippleStateChange {
             override fun onRippleChangeStart(selected: Boolean) {
                 if (selected) {
                     ripple2.unCheck()
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        ripple2.setStateListener(object : RippleLayout.IRippleStateChange {
+        ripple2.setStateListener(object : RippleLayoutKtl.IRippleStateChange {
             override fun onRippleChangeStart(selected: Boolean) {
                 if (selected) {
                     ripple1.unCheck()

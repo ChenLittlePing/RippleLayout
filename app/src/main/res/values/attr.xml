@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ripple_layout">
+        <attr name="ripple_color" format="color"/>
+        <attr name="shadow_color" format="color"/>
+        <attr name="shadow_space" format="dimension"/>
+        <attr name="def_bg" format="color"/>
+        <attr name="radius" format="dimension"/>
+    </declare-styleable>
+</resources>

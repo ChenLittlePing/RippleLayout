@@ -74,19 +74,21 @@ class RippleLayoutKtl: FrameLayout {
     private var stateListener: IRippleStateChange? = null
 
     constructor(context: Context) : super(context) {
-        init(context)
+        init(context, null)
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init(context)
+        init(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr) {
-        init(context)
+        init(context, attrs)
     }
 
-    private fun init(context: Context) {
+    private fun init(context: Context, attrs: AttributeSet?) {
+        getXmlAttrs(attrs)
+
         scroller = Scroller(context, DecelerateInterpolator(3f))
 
         ripplePaint.color = rippleColor
@@ -106,6 +108,17 @@ class RippleLayoutKtl: FrameLayout {
 
         setPadding((shadowSpace + paddingLeft).toInt(), (shadowSpace + paddingTop).toInt(),
             (shadowSpace + paddingRight).toInt(), (shadowSpace + paddingBottom).toInt())
+    }
+
+    private fun getXmlAttrs(attrs: AttributeSet?) {
+        if (attrs != null) {
+            val ta = context.obtainStyledAttributes(attrs, R.styleable.ripple_layout)
+            rippleColor = ta.getColor(R.styleable.ripple_layout_ripple_color, rippleColor)
+            shadowSpace = ta.getDimension(R.styleable.ripple_layout_shadow_space, shadowSpace)
+            shadowColor = ta.getColor(R.styleable.ripple_layout_shadow_color, shadowColor)
+            normalColor = ta.getColor(R.styleable.ripple_layout_def_bg, normalColor)
+            radius = ta.getDimension(R.styleable.ripple_layout_radius, radius)
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
