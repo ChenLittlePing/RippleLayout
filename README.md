@@ -1,1 +1,1 @@
-![水波纹控件](http://upload-images.jianshu.io/upload_images/2789400-8c05cfee56474886.gif?imageMogr2/auto-orient/strip)
+![水波纹控件](https://github.com/ChenLittlePing/RippleLayout/blob/master/demo.gif)
