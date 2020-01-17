@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.Xfermode;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -74,6 +75,8 @@ public class RippleLayout extends FrameLayout {
     // 阴影颜色
     private int shadowColor = Color.GRAY;
 
+    private final Xfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP);
+
     private IRippleStateChange stateListener;
 
     public RippleLayout(Context context) {
@@ -115,7 +118,7 @@ public class RippleLayout extends FrameLayout {
         shadowPaint.setStyle(Paint.Style.FILL);
         shadowPaint.setAntiAlias(true);
 
-        //设置阴影，如果最有的参数color为不透明的，则透明度由shadowPaint的alpha决定
+        //设置阴影，如果最右的参数color为不透明的，则透明度由shadowPaint的alpha决定
         shadowPaint.setShadowLayer(shadowSpace /5f*4f, 0f, 0f, shadowColor);
 
         setPadding((int) (shadowSpace + getPaddingLeft()), (int) (shadowSpace + getPaddingTop()),
@@ -130,6 +133,7 @@ public class RippleLayout extends FrameLayout {
             shadowColor = ta.getColor(R.styleable.ripple_layout_shadow_color, shadowColor);
             normalColor = ta.getColor(R.styleable.ripple_layout_def_bg, normalColor);
             radius = ta.getDimension(R.styleable.ripple_layout_radius, radius);
+            ta.recycle();
         }
     }
 
@@ -142,7 +146,7 @@ public class RippleLayout extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         // 绘制阴影
         canvas.drawRoundRect(shadowRect, radius, radius, shadowPaint);
@@ -157,7 +161,7 @@ public class RippleLayout extends FrameLayout {
         canvas.drawPath(clipPath, normalPaint);
 
         // 设置裁剪模式
-        ripplePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        ripplePaint.setXfermode(xfermode);
 
         // 绘制水波纹
         canvas.drawCircle(center.x, center.y, curRadius, ripplePaint);

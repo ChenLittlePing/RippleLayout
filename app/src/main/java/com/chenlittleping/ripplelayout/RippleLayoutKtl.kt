@@ -71,6 +71,9 @@ class RippleLayoutKtl: FrameLayout {
     // 阴影颜色
     private var shadowColor = Color.GRAY
 
+    // 裁剪模式
+    private val xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
+
     private var stateListener: IRippleStateChange? = null
 
     constructor(context: Context) : super(context) {
@@ -103,7 +106,7 @@ class RippleLayoutKtl: FrameLayout {
         shadowPaint.style = Paint.Style.FILL
         shadowPaint.isAntiAlias = true
 
-        //设置阴影，如果最有的参数color为不透明的，则透明度由shadowPaint的alpha决定
+        //设置阴影，如果最右的参数color为不透明的，则透明度由shadowPaint的alpha决定
         shadowPaint.setShadowLayer(shadowSpace/5f*4f, 0f, 0f, shadowColor)
 
         setPadding((shadowSpace + paddingLeft).toInt(), (shadowSpace + paddingTop).toInt(),
@@ -118,6 +121,7 @@ class RippleLayoutKtl: FrameLayout {
             shadowColor = ta.getColor(R.styleable.ripple_layout_shadow_color, shadowColor)
             normalColor = ta.getColor(R.styleable.ripple_layout_def_bg, normalColor)
             radius = ta.getDimension(R.styleable.ripple_layout_radius, radius)
+            ta.recycle()
         }
     }
 
@@ -128,7 +132,7 @@ class RippleLayoutKtl: FrameLayout {
     }
 
     override fun dispatchDraw(canvas: Canvas) {
-        setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
         // 绘制阴影
         canvas.drawRoundRect(shadowRect, radius, radius, shadowPaint)
@@ -143,7 +147,7 @@ class RippleLayoutKtl: FrameLayout {
         canvas.drawPath(clipPath, normalPaint)
 
         // 设置裁剪模式
-        ripplePaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
+        ripplePaint.xfermode = xfermode
 
         // 绘制水波纹
         canvas.drawCircle(center.x, center.y, curRadius, ripplePaint)
