@@ -146,7 +146,11 @@ public class RippleLayout extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        // 需要关闭硬件结束才能绘制阴影，但同时使用软件绘制会导致控件一直重绘
+        // 所以只能在动画的时候开启软件绘制，避免一直重绘
+        if (scroller.computeScrollOffset()) {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
 
         // 绘制阴影
         canvas.drawRoundRect(shadowRect, radius, radius, shadowPaint);
